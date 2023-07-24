@@ -1,8 +1,14 @@
+/**
+* LibraryController
+*
+* @author  Ravina Motwani
+* @version 1.0
+* @since   2023-07-25
+*/
 package com.technogise.library.management.controller;
 
 import java.util.List;
 
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,67 +20,88 @@ import org.springframework.web.bind.annotation.RestController;
 import com.technogise.library.management.entity.Book;
 import com.technogise.library.management.entity.BorrowedBook;
 import com.technogise.library.management.exception.LibraryException;
+import com.technogise.library.management.model.request.BookModel;
 import com.technogise.library.management.service.LibraryService;
-import com.technogise.library.management.service.LoggerService;
 
 @RestController
 @RequestMapping("/library")
 public class LibraryController {
 	private final LibraryService libraryService;
-	private final Logger logger;
 
 	@Autowired
-	public LibraryController(LibraryService libraryService, LoggerService loggerService) {
+	public LibraryController(LibraryService libraryService) {
 		this.libraryService = libraryService;
-		this.logger = loggerService.getLogger(LibraryController.class);
 	}
 
+	/**
+	 * This endpoint is used to view all books present in the library
+	 * 
+	 * @return List of {@link Book}
+	 */
 	@GetMapping("/books")
 	public List<Book> viewBooks() {
-		logger.traceEntry("Received request for viewBooks");
-		return logger.traceExit("Exit from viewBooks() with respose: {]", libraryService.getAllBooks());
+		return libraryService.getAllBooks();
 	}
 
+	/**
+	 * This endpoint is used to add book in the library
+	 * 
+	 * @param book- {@link Book}
+	 * @return {@link Book}
+	 */
 	@PostMapping("/add")
 	public Book addBook(@RequestBody Book book) {
-		logger.traceEntry("Received request to addBook(book={})", book);
-		return logger.traceExit("Exit from addBook() with respose: {]", libraryService.addBook(book));
+		return libraryService.addBook(book);
 	}
 
+	/**
+	 * This endpoint is used to borrow book from the library
+	 * 
+	 * @param bookModel- {@link BookModel}
+	 * @return Status of book borrowed
+	 */
 	@PostMapping("/borrow")
-	public String borrowBook(@RequestParam String userId, @RequestParam String bookTitle) throws LibraryException {
-		logger.traceEntry("Received request to borrowBook(userId={}, bookTitle={}): {}", userId, bookTitle);
+	public String borrowBook(@RequestBody BookModel bookModel) throws LibraryException {
 		try {
-			boolean bookBorrowed = libraryService.borrowBook(userId, bookTitle);
+			boolean bookBorrowed = libraryService.borrowBook(bookModel.getUserId(), bookModel.getBookTitle());
 			if (bookBorrowed) {
-				return logger.traceExit("Exit from borrowBook() with respose: {}", "Book borrowed successfully");
+				return "Book borrowed successfully";
 			} else {
-				return logger.traceExit("Exit from borrowBook() with respose: {}", "Book not borrowed successfully");
+				return "Book not borrowed successfully";
 			}
 		} catch (LibraryException ex) {
-			return logger.traceExit("Exit from borrowBook() with catch respose: {}", ex.getMessage());
+			return ex.getMessage();
 		}
 	}
 
+	/**
+	 * This endpoint is used to return book to the library
+	 * 
+	 * @param bookModel- {@link BookModel}
+	 * @return Status of book returned
+	 */
 	@PostMapping("/return")
-	public String returnBook(@RequestParam String userId, @RequestParam String bookTitle) throws LibraryException {
-		logger.traceEntry("Received request to returnBook(userId={}, bookTitle={}): {}", userId, bookTitle);
+	public String returnBook(@RequestBody BookModel bookModel) throws LibraryException {
 		try {
-			boolean bookReturned = libraryService.returnBook(userId, bookTitle);
+			boolean bookReturned = libraryService.returnBook(bookModel.getUserId(), bookModel.getBookTitle());
 			if (bookReturned) {
-				return logger.traceExit("Exit from returnBook() with respose: {}", "Book returned successfully");
+				return "Book returned successfully";
 			} else {
-				return logger.traceExit("Exit from returnBook() with respose: {}", "Book not returned successfully");
+				return "Book not returned successfully";
 			}
 		} catch (LibraryException ex) {
-			return logger.traceExit("Exit from returnBook() with catch respose: {}", ex.getMessage());
+			return ex.getMessage();
 		}
 	}
 
+	/**
+	 * This endpoint is used to view the book borrowed from the library
+	 * 
+	 * @param userId- Id of the user
+	 * @return List of {@link BorrowedBook}
+	 */
 	@GetMapping("/borrowedBooks")
 	public List<BorrowedBook> viewBorrowedBooks(@RequestParam String userId) {
-		logger.traceEntry("Received request to viewBorrowedBooks(userId={})", userId);
-		return logger.traceExit("Exit from viewBorrowedBooks() with response: {}",
-				libraryService.getBorrowedBooksByUser(userId));
+		return libraryService.getBorrowedBooksByUser(userId);
 	}
 }

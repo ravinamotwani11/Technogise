@@ -1,3 +1,10 @@
+/**
+* BorrowedBook Entity
+*
+* @author  Ravina Motwani
+* @version 1.0
+* @since   2023-07-25
+*/
 package com.technogise.library.management.entity;
 
 import javax.persistence.Entity;
@@ -12,16 +19,20 @@ public class BorrowedBook {
 	private Long id;
 	private String userId;
 	private String bookTitle;
+	private Long bookId;
+	private Boolean active;
 
 	// Constructors
 	public BorrowedBook() {
 	}
 
-	public BorrowedBook(Long id, String userId, String bookTitle) {
+	public BorrowedBook(Long id, String userId, String bookTitle, Long bookId, Boolean active) {
 		super();
 		this.id = id;
 		this.userId = userId;
 		this.bookTitle = bookTitle;
+		this.bookId = bookId;
+		this.active = active;
 	}
 
 	// Getters and setters
@@ -47,6 +58,22 @@ public class BorrowedBook {
 
 	public void setBookTitle(String bookTitle) {
 		this.bookTitle = bookTitle;
+	}
+
+	public Long getBookId() {
+		return bookId;
+	}
+
+	public void setBookId(Long bookId) {
+		this.bookId = bookId;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 }

@@ -1,9 +1,9 @@
 /**
-* Book Model
+* Book Entity
 *
 * @author  Ravina Motwani
 * @version 1.0
-* @since   2023-07-23
+* @since   2023-07-25
 */
 package com.technogise.library.management.entity;
 
@@ -20,17 +20,16 @@ public class Book {
 	private String title;
 	private String author;
 	private Boolean active = true;
-	private Integer count;
 
 	// Constructors
 	public Book() {
-		
+
 	}
-	public Book(Long id, String title, String author, Integer count) {
+
+	public Book(Long id, String title, String author) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
-		this.count = count;
 	}
 
 	// Getters and setters
@@ -57,17 +56,13 @@ public class Book {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
+
 	public Boolean getActive() {
 		return active;
 	}
+
 	public void setActive(Boolean active) {
-		this.active=active;
+		this.active = active;
 	}
-	public Integer getCount() {
-		return count;
-	}
-	public void setCount(Integer count) {
-		this.count = count;
-	}
-	
+
 }

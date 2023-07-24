@@ -16,8 +16,17 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Spring Data JPA and Hibernate
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.hibernate:hibernate-core'
+    // H2 Database
+    runtimeOnly 'com.h2database:h2:1.4.200'
+
+    // Mockito Core - Required for mocking objects in tests
+    testImplementation 'org.mockito:mockito-core:3.12.4'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'junit:junit:4.13.2'
 }
 
 tasks.named('test') {
